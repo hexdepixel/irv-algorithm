@@ -1,6 +1,8 @@
 # IRV Algorithm
 An algorithm for Instant-Runoff Voting elections.
 
+[Run online](https://repl.it/@hablabemails/IRV-Algorithm-1)
+
 ## What's Instant-Runoff Voting?
 Simply put, [Instant-Runoff Voting (IRV)](https://en.wikipedia.org/wiki/Instant-runoff_voting) is a voting system for electing one winner, designed to simulate many elections where one candidate is eliminated in each round, without the impracticality of holding multiple elections. It is also known as the alternative vote and preferential voting.
 
@@ -21,11 +23,11 @@ A  B  C
 C is eliminated.
 C's voters chose B for their second choice.
 
----##--- <- MAJORITY
+---## <- MAJORITY
 ## ##
 ## ##
-## ## ##
-A  B  C
+## ##
+A  B
 
 B is elected.
 ```

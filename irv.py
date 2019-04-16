@@ -1,9 +1,31 @@
-import re
+import random
 
-candidates = {i:0 for i in range(int(input("How many candidates? ")))}
+# Converts list into English (e.g. ["a", "b", "c"] becomes "a, b, and c")
+def sentenceify(inputList):
+    if len(inputList) == 1:
+        return inputList[0]
+    else:
+        return "{} and {}".format(", ".join(inputList[:-1]), inputList[-1])
+
+candidates = None
 outCandidates = []
+ballots = []
 
-ballots = input("Please enter the ballots ").split()
+if input("Will you open from a file (y/n)? ") == "y":
+    file = open(input("What is the name of the file (with extension)? "), "r")
+    fileLines = [line.strip() for line in file.readlines()]
+    candidates = {i:0 for i in fileLines[0].split()}
+    ballots = [line.split() for line in fileLines[1:]]
+    file.close()
+else:
+    {i:0 for i in input("Please enter the candidates: ").split()}
+    
+    while True:
+        ballot = input("Please enter a ballot or leave blank to finish: ").split()
+        
+        if ballot: ballots.append(ballot)
+        else: break
+
 majorityReached = False
 
 while not majorityReached:
@@ -12,8 +34,8 @@ while not majorityReached:
     
     # Counts the ballots
     for ballot in ballots:
-        candidates[int(ballot[0])] += 1
-        print("Ballot {} goes to Candidate {}".format(ballot, ballot[0]))
+        candidates[ballot[0]] += 1
+        print("Ballot {} goes to {}".format(sentenceify(ballot), ballot[0]))
     
     # Line break
     print()
@@ -24,10 +46,10 @@ while not majorityReached:
         if candidates[candidate] > len(ballots) / 2:
             # Announce your votes and that a majority has been reached
             majorityReached = True
-            print("Candidate {} has {}/{} votes and reaches a majority".format(candidate, candidates[candidate], len(ballots)))
+            print("{} has {}/{} votes and reaches a majority".format(candidate, candidates[candidate], len(ballots)))
         else:
             # Otherwise, announce your votes
-            print("Candidate {} has {}/{} votes".format(candidate, candidates[candidate], len(ballots)))
+            print("{} has {}/{} votes".format(candidate, candidates[candidate], len(ballots)))
     
     if not majorityReached:
         # Finds the least voted candidates
@@ -36,31 +58,32 @@ while not majorityReached:
         
         # If there is a tie, announce that there is a tie
         if len(leastVoted) > 1:
-            print("Candidates {} and {} are tied, elimination will be random".format(", ".join(leastVotedStr[:-1]), leastVoted[-1]))
+            print("{} are tied, elimination will be random".format(sentenceify(leastVoted)))
         
-        # Eliminates and announces the first candidate in the leastVoted list
-        del candidates[leastVoted[0]]
-        outCandidates.append(str(leastVoted[0]))
-        print("Candidate {} has been eliminated\n".format(leastVoted[0]))
+        # Eliminates and announces a random candidate from the leastVoted list
+        outCandidate = random.choice(leastVoted);
+        del candidates[outCandidate]
+        outCandidates.append(outCandidate)
+        print("{} has been eliminated\n".format(outCandidate))
         
         # Removes eliminated candidates from the ballots while keeping a copy of the old ballots
         oldBallots = ballots
-        ballots = [re.sub("|".join(outCandidates), "", ballot) for ballot in ballots]
+        ballots = [[choice for choice in ballot if not choice in outCandidates] for ballot in ballots]
         
         # Announces the changes in the ballots
         for ballotIndex in range(len(ballots)):
             oldBallot = oldBallots[ballotIndex]
             newBallot = ballots[ballotIndex]
             
-            if oldBallot != newBallot and newBallot != "":
-                print("Ballot {} becomes ballot {}".format(oldBallot, newBallot))
-            elif newBallot == "":
-                print("Ballot {} is removed".format(oldBallot))
+            if oldBallot != newBallot and newBallot:
+                print("Ballot {} becomes ballot {}".format(sentenceify(oldBallot), sentenceify(newBallot)))
+            elif not newBallot:
+                print("Ballot {} is removed".format(sentenceify(oldBallot)))
             else:
-                print("Ballot {} stays the same".format(oldBallot))
+                print("Ballot {} stays the same".format(sentenceify(oldBallot)))
         
         # Removes empty ballots
-        ballots = [ballot for ballot in ballots if ballot != ""]
+        ballots = [ballot for ballot in ballots if ballot]
         
         # Announces new round
         print("\nNEXT ROUND\n")

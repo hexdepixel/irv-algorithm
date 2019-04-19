@@ -15,58 +15,79 @@ The voters, instead of only choosing one person on their ballot, can rank their 
 Then, if there is no majority, the least popular candidate is eliminated from the election, and that candidate's votes are redistributed according to the voter's second choice votes.
 ```
 -------- <- MAJORITY
-## ##
-## ##
-## ## ##
+[] []
+[] []
+[] [] []
 A  B  C
-
+```
 C is eliminated.
 C's voters chose B for their second choice.
-
----## <- MAJORITY
-## ##
-## ##
-## ##
+```
+---[] <- MAJORITY
+[] []
+[] []
+[] []
 A  B
-
+```
 B is elected.
-```
+
 ## How to use
-### Manual input
-1. First, enter the names of the candidates, separated by spaces.
-```
-Please enter the candidates: Alex Bill Carl
-```
-2. Then, enter the ballots in order of ranking on the ballot, separated by spaces (unmarked candidates should just be ignored). Keep doing this until you have entered all of the ballots.
-```
-[ ] Alex | [1] Bill | Bill Carl
-[1] Bill | [2] Carl |
-[2] Carl |          |
-```
-```
-Please enter a ballot or leave blank to finish: Bill Carl
-```
-3. When you are finished, leave the ballot input blank and press `ENTER`. The election should start.
-```
-Please enter a ballot or leave blank to finish: 
-...
-```
-### Importing a file
+### Creating a file
 1. The first line of a file should contain the names of the candidates, separated by spaces.
 ```
 Alex Bill Carl
 ```
 2. The rest of the lines should contain the ballots in order of ranking on the ballot, separated by spaces (unmarked candidates should just be ignored).
 ```
-[ ] Alex | [1] Bill | Bill Carl
-[1] Bill | [2] Carl |
-[2] Carl |          |
++==========+==========+===========+
+| [ ] Alex | [1] Bill | Bill Carl |
+| [1] Bill | [2] Carl |           |
+| [2] Carl |          |           |
++==========+==========+===========+
++==========+==========+===========+
+| [1] Alex | [1] Alex | Alex Carl |
+| [ ] Bill | [2] Carl |           |
+| [2] Carl |          |           |
++==========+==========+===========+
+etc.
 ```
 ```
 Bill Carl
+Alex Carl
+etc.
 ```
-3. To open the file, answer `y` to the question "Will you open from a file?" and enter the full name of your file, including its extensions. The file should be in the same folder as the algorithm.
+3. The file should be saved as a text file in the same folder as the algorithm.
 ```
-Will you open from a file (y/n)? y
-What is the name of the file (with extension)? test.txt
+.../Downloads/irv.py
+.../Downloads/myFile.txt
+```
+
+### Importing a file
+1. Enter "0" when asked which option to select.
+```
+[0] Import file
+[1] Random test
+Which option? 0
+```
+2. Write the name of the file _without_ the extension (the `.txt` at the end).
+```
+.../Downloads/irv.py
+.../Downloads/myFile.txt
+```
+```
+What is the name of the file (without the extension)? myFile
+```
+### Randomly generating a test
+As the name suggests, this is mainly designed for testing the program by randomly generating a certain number of ballots. It does _not_ create a file.
+
+1. Enter "1" when asked which option to select.
+```
+[0] Import file
+[1] Random test
+Which option? 1
+```
+2. Write the number of candidates and ballots you want.
+```
+How many candidates are there? 10
+How many ballots are there? 1000000
 ```
